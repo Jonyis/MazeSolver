@@ -1,21 +1,27 @@
 #include "Renderer.h"
-#include <iostream>
 
 Renderer::Renderer(sf::RenderWindow& _window) : window(_window) {
 }
 
-void Renderer::clear() {
+void Renderer::clear() const
+{
 	window.clear();
 }
 
-void Renderer::drawAll(int width, int height, int cellSize, sf::Vector2i offset, const std::vector<std::vector<int>>& levelMap) {
+sf::Vector2i Renderer::getMapCoordinates(sf::Vector2i mousePos) const
+{
+	return sf::Vector2i((mousePos.x / cellSize) - offset.x, (mousePos.y / cellSize) - offset.y);
+}
+
+void Renderer::drawAll(int width, int height, const std::vector<std::vector<int>>& levelMap) const
+{
 	clear();
-	drawBorder(0, 0, width, height, cellSize, offset);
-	drawMap(cellSize, offset, levelMap);
+	drawBorder(0, 0, width, height);
+	drawMap(levelMap);
 	window.display();
 }
 
-void Renderer::drawCell(int x, int y, int cellSize, sf::Vector2i offset, sf::Color color)
+void Renderer::drawCell(int x, int y, sf::Color color) const
 {
 	sf::RectangleShape rect(sf::Vector2f(cellSize, cellSize));
 	rect.setPosition((x + offset.x) * cellSize, (y + offset.y) * cellSize);
@@ -24,7 +30,16 @@ void Renderer::drawCell(int x, int y, int cellSize, sf::Vector2i offset, sf::Col
 	window.display();
 }
 
-void Renderer::drawMap(int cellSize, sf::Vector2i offset, const std::vector<std::vector<int>>& mapData)
+void Renderer::drawPlayer(int x, int y, sf::Color color) const
+{
+	sf::CircleShape circle(cellSize / 2);
+	circle.setFillColor(color);
+	circle.setPosition((x + offset.x) * cellSize, (y + offset.y) * cellSize);
+	window.draw(circle);
+	window.display();
+}
+
+void Renderer::drawMap(const std::vector<std::vector<int>>& mapData) const
 {
 	sf::RectangleShape rect(sf::Vector2f(cellSize, cellSize));
 	rect.setFillColor(sf::Color::Yellow);
@@ -41,7 +56,8 @@ void Renderer::drawMap(int cellSize, sf::Vector2i offset, const std::vector<std:
 	}
 }
 
-void Renderer::drawBorder(int x, int y, int width, int height, int cellSize, sf::Vector2i offset, sf::Color color) {
+void Renderer::drawBorder(int x, int y, int width, int height, sf::Color color) const
+{
 	sf::RectangleShape rect(sf::Vector2f(width * cellSize, height * cellSize));
 	rect.setPosition((x + offset.x) * cellSize, (y + offset.y) * cellSize);
 	rect.setFillColor(sf::Color::Transparent);

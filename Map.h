@@ -7,7 +7,7 @@ class Map
 	public:
 		explicit Map(int width, int height, const Renderer& renderer);
 		~Map() = default;
-		bool isWall(int x, int y);
+		bool isWall(int x, int y) const;
 		void setWall(int x, int y);
 		void setEmpty(int x, int y);
 		void printMap() const;
@@ -19,10 +19,8 @@ class Map
 	private:
 		int width;
 		int height;
-		int cellSize = 10;
-		sf::Vector2i offset = { 2, 2 };
 		std::vector<std::vector<int>> levelMap;
-		Renderer renderer;
+		const Renderer& renderer;
 
 		bool isValidPosition(int x, int y) const;
 };

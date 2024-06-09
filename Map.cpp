@@ -2,21 +2,21 @@
 #include <iostream>
 
 Map::Map(int width, int height, const Renderer& renderer) : 
-	width(width), height(height), levelMap(std::vector< std::vector<int> >(height, std::vector<int>(width, 0))), renderer(renderer)
+	width(width), height(height), levelMap(std::vector<std::vector<int>>(height, std::vector<int>(width, 0))), renderer(renderer)
 {
-	this->renderer.drawAll(width, height, cellSize, offset, levelMap);
+	this->renderer.drawAll(width, height, levelMap);
 }
 
-bool Map::isWall(int x, int y)
+bool Map::isWall(int x, int y) const
 {
-	return isValidPosition(x, y) && this->levelMap[y][x] == 1;
+	return !isValidPosition(x, y) || this->levelMap[y][x] == 1;
 }
 
 void Map::setWall(int x, int y)
 {
 	if (isValidPosition(x, y)) {
 		this->levelMap[y][x] = 1;
-		renderer.drawCell(x, y, cellSize, offset);
+		renderer.drawCell(x, y);
 	}
 }
 
@@ -24,7 +24,7 @@ void Map::setEmpty(int x, int y)
 {
 	if (isValidPosition(x, y)) {
 		this->levelMap[y][x] = 0;
-		renderer.drawCell(x, y, cellSize, offset, sf::Color::Black);
+		renderer.drawCell(x, y, sf::Color::Black);
 	}
 }
 
@@ -44,13 +44,13 @@ void Map::printMap() const
 void Map::clearMap()
 {
 	this->levelMap = std::vector<std::vector<int>>(height, std::vector<int>(width, 0));
-	renderer.drawAll(width, height, cellSize, offset, levelMap);
+	renderer.drawAll(width, height, levelMap);
 }
 
 void Map::fillMap()
 {
 	this->levelMap = std::vector<std::vector<int>>(height, std::vector<int>(width, 1));
-	renderer.drawAll(width, height, cellSize, offset, levelMap);
+	renderer.drawAll(width, height, levelMap);
 }
 
 bool Map::isValidPosition(int x, int y) const
@@ -64,6 +64,6 @@ bool Map::isValidPosition(int x, int y) const
 
 sf::Vector2i Map::getCellCoordinates(sf::Vector2i mousePos) const
 {
-	return sf::Vector2i((mousePos.x / cellSize) - offset.x, (mousePos.y / cellSize) - offset.y);
+	return renderer.getMapCoordinates(mousePos);
 }
 

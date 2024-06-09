@@ -2,9 +2,9 @@
 #include <iostream>
 #include "Renderer.h"
 #include "Map.h"
-#include "SimulationStatistics.h"
+#include "PlayerController.h"
 
-void handleWindowEvents(sf::RenderWindow& window, Map& particleManager, bool& isPaused, bool& isBuilding, bool& isErasing);
+void handleWindowEvents(sf::RenderWindow& window, Map& map, PlayerController& playerController, bool& isPaused, bool& isBuilding, bool& isErasing);
 
 int main()
 {
@@ -13,7 +13,8 @@ int main()
     sf::RenderWindow window(sf::VideoMode(500 * 2, 2 * 500), "", sf::Style::Default, settings);
 
     Renderer renderer(window);
-    Map levelMap(25*3, 25*3, renderer);
+    Map levelMap(25, 25, renderer);
+    PlayerController player(2, 2, levelMap, renderer);
 
     bool isPaused = false;
     bool isBuilding = false;
@@ -21,16 +22,16 @@ int main()
 
     while (window.isOpen())
     {
-        handleWindowEvents(window, levelMap, isPaused, isBuilding, isErasing);
+        handleWindowEvents(window, levelMap, player, isPaused, isBuilding, isErasing);
 
         if (isBuilding) {
             auto mousePos = sf::Mouse::getPosition(window);
-            auto cellCords = levelMap.getCellCoordinates(mousePos);
+            auto cellCords = renderer.getMapCoordinates(mousePos);
             levelMap.setWall(cellCords.x, cellCords.y);
         }
         else if (isErasing) {
             auto mousePos = sf::Mouse::getPosition(window);
-            auto cellCords = levelMap.getCellCoordinates(mousePos);
+            auto cellCords = renderer.getMapCoordinates(mousePos);
             levelMap.setEmpty(cellCords.x, cellCords.y);
         }
     }
@@ -39,7 +40,7 @@ int main()
 }
 
 
-void handleWindowEvents(sf::RenderWindow& window, Map& levelMap, bool& isPaused, bool& isBuilding, bool& isErasing) {
+void handleWindowEvents(sf::RenderWindow& window, Map& levelMap, PlayerController& playerController, bool& isPaused, bool& isBuilding, bool& isErasing) {
     sf::Event event;
 
     while (window.pollEvent(event))
@@ -64,6 +65,19 @@ void handleWindowEvents(sf::RenderWindow& window, Map& levelMap, bool& isPaused,
                 case sf::Keyboard::F:
                     levelMap.fillMap();
                     break;
+                case sf::Keyboard::Right:
+                    playerController.Update(1, 0);
+                    break;
+                case sf::Keyboard::Left:
+                    playerController.Update(-1, 0);
+                    break;
+                case sf::Keyboard::Up:
+                    playerController.Update(0, -1);
+                    break;
+                case sf::Keyboard::Down:
+                    playerController.Update(0, 1);
+                    break;
+
                 default: break;
             }
 		}
