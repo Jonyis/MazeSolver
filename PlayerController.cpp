@@ -8,7 +8,7 @@ PlayerController::PlayerController(int initialX, int initialY, const Map& mapCon
 
 }
 
-void PlayerController::Update(int xInput, int yInput)
+void PlayerController::update(int xInput, int yInput)
 {
 	int horizontalMovement = xInput != 0 ? xInput < 0 ? -1 : 1 : 0;
 	int verticalMovement = yInput != 0 ? yInput < 0 ? -1 : 1 : 0;

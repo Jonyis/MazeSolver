@@ -15,6 +15,8 @@ class Map
 		void fillMap();
 		std::vector<std::vector<int>> getMap() const { return levelMap; }
 		sf::Vector2i getCellCoordinates(sf::Vector2i mousePos) const;
+		sf::Vector2i getCellCoordinatesFromIndex(int index) const;
+		int getCellIndexFromCoordinates(sf::Vector2i coordinates) const;
 
 	private:
 		int width;

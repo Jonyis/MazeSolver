@@ -7,7 +7,7 @@ class PlayerController
 	PlayerController(int initialX, int initialY, const Map& mapController, const Renderer& renderer);
 	~PlayerController() = default;
 
-	void Update(int xInput, int yInput);
+	void update(int xInput, int yInput);
 	
 
 	private:

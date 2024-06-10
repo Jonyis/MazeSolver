@@ -67,3 +67,15 @@ sf::Vector2i Map::getCellCoordinates(sf::Vector2i mousePos) const
 	return renderer.getMapCoordinates(mousePos);
 }
 
+sf::Vector2i Map::getCellCoordinatesFromIndex(int index) const
+{
+	int x = index % width;
+	int y = index / width;
+	return sf::Vector2i(x, y);
+}
+
+int Map::getCellIndexFromCoordinates(sf::Vector2i coordinates) const
+{
+	return coordinates.y * width + coordinates.x;
+}
+

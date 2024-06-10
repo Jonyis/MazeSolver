@@ -39,6 +39,19 @@ void Renderer::drawPlayer(int x, int y, sf::Color color) const
 	window.display();
 }
 
+void Renderer::drawPath(const std::vector<sf::Vector2i>& path, sf::Color color) const
+{
+	sf::RectangleShape rect(sf::Vector2f(cellSize, cellSize));
+	rect.setFillColor(color);
+	for (const auto& cell : path)
+	{
+		rect.setPosition((cell.x + offset.x) * cellSize, (cell.y + offset.y) * cellSize);
+		window.draw(rect);
+	}
+	window.display();
+
+}
+
 void Renderer::drawMap(const std::vector<std::vector<int>>& mapData) const
 {
 	sf::RectangleShape rect(sf::Vector2f(cellSize, cellSize));

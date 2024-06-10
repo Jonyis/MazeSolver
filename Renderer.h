@@ -10,6 +10,7 @@ class Renderer
 		void drawAll(int width, int height, const std::vector<std::vector<int>>& levelMap) const;
 		void drawCell(int x, int y, sf::Color color = sf::Color::Yellow) const;
 		void drawPlayer(int x, int y, sf::Color color = sf::Color::Green) const;
+		void drawPath(const std::vector<sf::Vector2i>& path, sf::Color color = sf::Color::Cyan) const;
 	private:
 		sf::RenderWindow& window;
 		int cellSize = 30;

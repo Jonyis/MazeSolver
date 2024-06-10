@@ -3,8 +3,9 @@
 #include "Renderer.h"
 #include "Map.h"
 #include "PlayerController.h"
+#include "MazeSolverAlgorithm.h"
 
-void handleWindowEvents(sf::RenderWindow& window, Map& map, PlayerController& playerController, bool& isPaused, bool& isBuilding, bool& isErasing);
+void handleWindowEvents(sf::RenderWindow& window, Map& map, PlayerController& playerController, MazeSolverAlgorithm& mazeSolver, bool& isPaused, bool& isBuilding, bool& isErasing);
 
 int main()
 {
@@ -15,6 +16,7 @@ int main()
     Renderer renderer(window);
     Map levelMap(25, 25, renderer);
     PlayerController player(2, 2, levelMap, renderer);
+    MazeSolverAlgorithm mazeSolver(sf::Vector2i(2, 2), sf::Vector2i(22, 22), levelMap, renderer);
 
     bool isPaused = false;
     bool isBuilding = false;
@@ -22,7 +24,7 @@ int main()
 
     while (window.isOpen())
     {
-        handleWindowEvents(window, levelMap, player, isPaused, isBuilding, isErasing);
+        handleWindowEvents(window, levelMap, player, mazeSolver, isPaused, isBuilding, isErasing);
 
         if (isBuilding) {
             auto mousePos = sf::Mouse::getPosition(window);
@@ -40,7 +42,7 @@ int main()
 }
 
 
-void handleWindowEvents(sf::RenderWindow& window, Map& levelMap, PlayerController& playerController, bool& isPaused, bool& isBuilding, bool& isErasing) {
+void handleWindowEvents(sf::RenderWindow& window, Map& levelMap, PlayerController& playerController, MazeSolverAlgorithm& mazeSolver, bool& isPaused, bool& isBuilding, bool& isErasing) {
     sf::Event event;
 
     while (window.pollEvent(event))
@@ -56,6 +58,10 @@ void handleWindowEvents(sf::RenderWindow& window, Map& levelMap, PlayerControlle
                 case sf::Keyboard::P:
 					levelMap.printMap();
 					break;
+                case sf::Keyboard::S:
+					mazeSolver.solve();
+                    playerController.update(0, 0); // Force to re-draw player
+					break;
                 case sf::Keyboard::Space: 
                     isPaused = !isPaused;
                     break;
@@ -66,16 +72,16 @@ void handleWindowEvents(sf::RenderWindow& window, Map& levelMap, PlayerControlle
                     levelMap.fillMap();
                     break;
                 case sf::Keyboard::Right:
-                    playerController.Update(1, 0);
+                    playerController.update(1, 0);
                     break;
                 case sf::Keyboard::Left:
-                    playerController.Update(-1, 0);
+                    playerController.update(-1, 0);
                     break;
                 case sf::Keyboard::Up:
-                    playerController.Update(0, -1);
+                    playerController.update(0, -1);
                     break;
                 case sf::Keyboard::Down:
-                    playerController.Update(0, 1);
+                    playerController.update(0, 1);
                     break;
 
                 default: break;
