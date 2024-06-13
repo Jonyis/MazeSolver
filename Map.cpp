@@ -14,17 +14,19 @@ bool Map::isWall(int x, int y) const
 
 void Map::setWall(int x, int y)
 {
-	if (isValidPosition(x, y)) {
+	if (isValidPosition(x, y) && this->levelMap[y][x] != 1) {
 		this->levelMap[y][x] = 1;
 		renderer.drawCell(x, y);
+		version++;
 	}
 }
 
 void Map::setEmpty(int x, int y)
 {
-	if (isValidPosition(x, y)) {
+	if (isValidPosition(x, y) && this->levelMap[y][x] != 0) {
 		this->levelMap[y][x] = 0;
 		renderer.drawCell(x, y, sf::Color::Black);
+		version++;
 	}
 }
 
@@ -44,12 +46,14 @@ void Map::printMap() const
 void Map::clearMap()
 {
 	this->levelMap = std::vector<std::vector<int>>(height, std::vector<int>(width, 0));
+	version++;
 	renderer.drawAll(width, height, levelMap);
 }
 
 void Map::fillMap()
 {
 	this->levelMap = std::vector<std::vector<int>>(height, std::vector<int>(width, 1));
+	version++;
 	renderer.drawAll(width, height, levelMap);
 }
 

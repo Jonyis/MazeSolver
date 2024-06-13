@@ -17,13 +17,14 @@ class Map
 		sf::Vector2i getCellCoordinates(sf::Vector2i mousePos) const;
 		sf::Vector2i getCellCoordinatesFromIndex(int index) const;
 		int getCellIndexFromCoordinates(sf::Vector2i coordinates) const;
+		int getVersion() const { return version; }
 
 	private:
 		int width;
 		int height;
 		std::vector<std::vector<int>> levelMap;
 		const Renderer& renderer;
-
+		int version = 0;
 		bool isValidPosition(int x, int y) const;
 };
 

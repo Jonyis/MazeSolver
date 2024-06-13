@@ -1,6 +1,7 @@
 #include "MazeSolverAlgorithm.h"
 #include <queue>
 #include <unordered_map>
+#include <unordered_set>
 
 MazeSolverAlgorithm::MazeSolverAlgorithm(sf::Vector2i startPos, sf::Vector2i endPos, Map& mapController, const Renderer& renderer)
 	: mapController(mapController), renderer(renderer), startPos(startPos), endPos(endPos)
@@ -9,9 +10,14 @@ MazeSolverAlgorithm::MazeSolverAlgorithm(sf::Vector2i startPos, sf::Vector2i end
 
 std::vector<sf::Vector2i> MazeSolverAlgorithm::solve() const
 {
+    if (mapController.getVersion() == lastVersion) {
+		return lastPath;
+	}
+
     std::priority_queue<std::pair<int, int>, std::vector<std::pair<int, int>>, std::greater<>> queue;
     std::unordered_map<int, int> cameFrom;
     std::unordered_map<int, int> costSoFar;
+    std::unordered_set<int> visited;
 
     int start = mapController.getCellIndexFromCoordinates(startPos);
     int end = mapController.getCellIndexFromCoordinates(endPos);
@@ -28,9 +34,13 @@ std::vector<sf::Vector2i> MazeSolverAlgorithm::solve() const
             break;
         }
 
+        if (!visited.insert(current).second) {
+            continue; // Skip if the node has already been visited
+        }
+
         for (int next : getNeighbors(mapController.getCellCoordinatesFromIndex(current))) {
-            if (cameFrom.count(next)) {
-                continue; // Skip if the node has been visited
+            if (visited.count(next)) {
+                continue; // Now using the visited set for clarity and efficiency
             }
 
             int newCost = costSoFar[current] + 1;
@@ -59,6 +69,8 @@ std::vector<sf::Vector2i> MazeSolverAlgorithm::solve() const
     renderer.drawAll(mapController.getMap().size(), mapController.getMap()[0].size(), mapController.getMap());
     renderer.drawPath(path);
 
+    lastVersion = mapController.getVersion();
+    lastPath = path;
     return path;
 }
 
