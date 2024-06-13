@@ -16,8 +16,7 @@ class MazeSolverAlgorithm
 		mutable std::vector<sf::Vector2i> lastPath;
 		mutable int lastVersion = -1;
 
-		std::vector<int> getNeighbors(sf::Vector2i current) const;
 
-		int heuristic(sf::Vector2i a, sf::Vector2i b) const;
+		int heuristic(int a, int b) const;
 };
 

@@ -83,3 +83,41 @@ int Map::getCellIndexFromCoordinates(sf::Vector2i coordinates) const
 	return coordinates.y * width + coordinates.x;
 }
 
+std::vector<int> Map::getNeighbors(int currentIndex) const
+{
+	int x = currentIndex % width;
+	int y = currentIndex / width;
+	std::vector<int> neighbors;
+	neighbors.reserve(4);
+
+	// Up neighbor
+	if (y > 0 && !isWall(x, y - 1)) {
+		neighbors.push_back(currentIndex - width);
+	}
+	// Down neighbor
+	if (y < height - 1 && !isWall(x, y + 1)) {
+		neighbors.push_back(currentIndex + width);
+	}
+	// Left neighbor
+	if (x > 0 && !isWall(x - 1, y)) {
+		neighbors.push_back(currentIndex - 1);
+	}
+	// Right neighbor
+	if (x < width - 1 && !isWall(x + 1, y)) {
+		neighbors.push_back(currentIndex + 1);
+	}
+
+	return neighbors;
+}
+
+
+int Map::distance(int indexA, int indexB) const
+{
+	int xA = indexA % width;
+	int yA = indexA / width;
+	int xB = indexB % width;
+	int yB = indexB / width;
+
+	return abs(xA - xB) + abs(yA - yB);
+
+}

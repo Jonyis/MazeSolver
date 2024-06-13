@@ -18,6 +18,8 @@ class Map
 		sf::Vector2i getCellCoordinatesFromIndex(int index) const;
 		int getCellIndexFromCoordinates(sf::Vector2i coordinates) const;
 		int getVersion() const { return version; }
+		std::vector<int> getNeighbors(int currentIndex) const;
+		int distance(int indexA, int indexB) const;
 
 	private:
 		int width;
