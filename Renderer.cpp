@@ -13,11 +13,11 @@ sf::Vector2i Renderer::getMapCoordinates(sf::Vector2i mousePos) const
 	return sf::Vector2i((mousePos.x / cellSize) - offset.x, (mousePos.y / cellSize) - offset.y);
 }
 
-void Renderer::drawAll(int width, int height, const std::vector<std::vector<int>>& levelMap) const
+void Renderer::drawAll(int width, int height, const std::vector<int>& levelMap) const
 {
 	clear();
 	drawBorder(0, 0, width, height);
-	drawMap(levelMap);
+	drawMap(width, height, levelMap);
 	window.display();
 }
 
@@ -52,19 +52,16 @@ void Renderer::drawPath(const std::vector<sf::Vector2i>& path, sf::Color color) 
 
 }
 
-void Renderer::drawMap(const std::vector<std::vector<int>>& mapData) const
+void Renderer::drawMap(int width, int height, const std::vector<int>& mapData) const
 {
 	sf::RectangleShape rect(sf::Vector2f(cellSize, cellSize));
 	rect.setFillColor(sf::Color::Yellow);
 	for (int i = 0; i < mapData.size(); i++)
 	{
-		for (int j = 0; j < mapData[i].size(); j++)
+		if (mapData[i] == 1)
 		{
-			if (mapData[i][j] == 1)
-			{
-				rect.setPosition((j + offset.x) * cellSize, (i + offset.y) * cellSize);
-				window.draw(rect);
-			}
+			rect.setPosition((i % width + offset.x) * cellSize, (i / width + offset.y) * cellSize);
+			window.draw(rect);
 		}
 	}
 }
