@@ -5,7 +5,7 @@
 #include "PlayerController.h"
 #include "MazeSolverAlgorithm.h"
 
-void handleWindowEvents(sf::RenderWindow& window, Map& map, PlayerController& playerController, MazeSolverAlgorithm& mazeSolver, bool& isPaused, bool& isBuilding, bool& isErasing);
+void handleWindowEvents(sf::RenderWindow& window, Map& map, PlayerController& playerController, const MazeSolverAlgorithm& mazeSolver, bool& isPaused, bool& isBuilding, bool& isErasing);
 
 int main()
 {
@@ -14,9 +14,10 @@ int main()
     sf::RenderWindow window(sf::VideoMode(500 * 2, 2 * 500), "", sf::Style::Default, settings);
 
     Renderer renderer(window);
-    Map levelMap(25, 25, renderer);
+    //Map levelMap(10, 10, renderer);
+    Map levelMap("map.txt", renderer);
     PlayerController player(2, 2, levelMap, renderer);
-    MazeSolverAlgorithm mazeSolver(sf::Vector2i(2, 2), sf::Vector2i(22, 22), levelMap, renderer);
+    MazeSolverAlgorithm mazeSolver(sf::Vector2i(2, 2), sf::Vector2i(28, 20), levelMap, renderer);
 
     bool isPaused = false;
     bool isBuilding = false;
@@ -42,7 +43,7 @@ int main()
 }
 
 
-void handleWindowEvents(sf::RenderWindow& window, Map& levelMap, PlayerController& playerController, MazeSolverAlgorithm& mazeSolver, bool& isPaused, bool& isBuilding, bool& isErasing) {
+void handleWindowEvents(sf::RenderWindow& window, Map& levelMap, PlayerController& playerController, const MazeSolverAlgorithm& mazeSolver, bool& isPaused, bool& isBuilding, bool& isErasing) {
     sf::Event event;
 
     while (window.pollEvent(event))
@@ -58,6 +59,9 @@ void handleWindowEvents(sf::RenderWindow& window, Map& levelMap, PlayerControlle
                 case sf::Keyboard::P:
 					levelMap.printMap();
 					break;
+                case sf::Keyboard::T:
+                    levelMap.writeToFile("map.txt");
+                    break;
                 case sf::Keyboard::S:
 					mazeSolver.solve();
                     playerController.update(0, 0); // Force to re-draw player

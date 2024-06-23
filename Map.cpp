@@ -1,9 +1,16 @@
 #include "Map.h"
 #include <iostream>
+#include <fstream>
 
 Map::Map(int width, int height, const Renderer& renderer) : 
 	width(width), height(height), levelMap(std::vector<std::vector<int>>(height, std::vector<int>(width, 0))), renderer(renderer)
 {
+	this->renderer.drawAll(width, height, levelMap);
+}
+
+Map::Map(const std::string& filename, const Renderer& renderer) : renderer(renderer)
+{
+	readFromFile(filename);
 	this->renderer.drawAll(width, height, levelMap);
 }
 
@@ -120,4 +127,44 @@ int Map::distance(int indexA, int indexB) const
 
 	return abs(xA - xB) + abs(yA - yB);
 
+}
+
+void Map::writeToFile(const std::string& filename) const
+{
+	std::ofstream myfile;
+	myfile.open(filename, std::ios::trunc);
+	myfile << height << " " << width << std::endl;
+
+	for (int i = 0; i < this->height; i++)
+	{
+		for (int j = 0; j < this->width; j++)
+		{
+			std::string result = this->levelMap[i][j] == 1 ? "#" : " ";
+			myfile << result;
+		}
+		myfile << std::endl;
+	}
+	myfile.close();
+}
+
+void Map::readFromFile(const std::string& filename)
+{
+	std::string line;
+	std::ifstream myfile(filename);
+	std::getline(myfile, line);
+	this->height = std::stoi(line.substr(0, line.find(' ')));
+	this->width = std::stoi(line.substr(line.find(' ') + 1));
+	this->levelMap = std::vector<std::vector<int>>(height, std::vector<int>(width, 0));
+	int row = 0;
+	if (myfile.is_open())
+	{
+		while (std::getline(myfile, line))
+		{
+			for (std::string::size_type i = 0; i < line.size(); ++i) {
+				this->levelMap[row][i] = line[i] == '#' ? 1 : 0;
+			}
+			row++;
+		}
+		myfile.close();
+	}
 }

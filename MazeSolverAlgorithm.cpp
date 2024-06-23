@@ -73,7 +73,7 @@ std::vector<sf::Vector2i> MazeSolverAlgorithm::solve() const
         [this](int index) { return mapController.getCellCoordinatesFromIndex(index); });
 
     //Draw the path
-    renderer.drawAll(mapController.getMap().size(), mapController.getMap()[0].size(), mapController.getMap());
+    renderer.drawAll(mapController.getMap()[0].size(), mapController.getMap().size(), mapController.getMap());
     renderer.drawPath(path);
 
     lastVersion = mapController.getVersion();

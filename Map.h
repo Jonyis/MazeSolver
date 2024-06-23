@@ -6,7 +6,9 @@ class Map
 {
 	public:
 		explicit Map(int width, int height, const Renderer& renderer);
+		explicit Map(const std::string& filename, const Renderer& renderer);
 		~Map() = default;
+
 		bool isWall(int x, int y) const;
 		void setWall(int x, int y);
 		void setEmpty(int x, int y);
@@ -21,6 +23,8 @@ class Map
 		std::vector<int> getNeighbors(int currentIndex) const;
 		int distance(int indexA, int indexB) const;
 
+		void writeToFile(const std::string& filename) const;
+
 	private:
 		int width;
 		int height;
@@ -28,5 +32,7 @@ class Map
 		const Renderer& renderer;
 		int version = 0;
 		bool isValidPosition(int x, int y) const;
+
+		void readFromFile(const std::string& filename);
 };
 
