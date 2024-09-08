@@ -4,6 +4,7 @@
 #include "Map.h"
 #include "PlayerController.h"
 #include "MazeSolverAlgorithm.h"
+#include "AutomatedPlayerController.h"
 
 void handleWindowEvents(sf::RenderWindow& window, Map& map, PlayerController& playerController, const MazeSolverAlgorithm& mazeSolver, bool& isPaused, bool& isBuilding, bool& isErasing);
 
@@ -13,13 +14,17 @@ int main()
     settings.antialiasingLevel = 8;
     sf::RenderWindow window(sf::VideoMode(500 * 2, 2 * 500), "", sf::Style::Default, settings);
 
+    unsigned int fpsLimit = 60;
+    window.setFramerateLimit(fpsLimit);
+
     Renderer renderer(window);
     //Map levelMap(10, 10, renderer);
     Map levelMap("map.txt", renderer);
     PlayerController player(2, 2, levelMap, renderer);
+    AutomatedPlayerController autoPlayer(2, 2, levelMap, renderer);
     MazeSolverAlgorithm mazeSolver(sf::Vector2i(2, 2), sf::Vector2i(28, 20), levelMap, renderer);
 
-    bool isPaused = false;
+    bool isPaused = true;
     bool isBuilding = false;
     bool isErasing = false;
 
@@ -37,6 +42,10 @@ int main()
             auto cellCords = renderer.getMapCoordinates(mousePos);
             levelMap.setEmpty(cellCords.x, cellCords.y);
         }
+
+        if (!isPaused) {
+			autoPlayer.update();
+		}
     }
 
     return 0;

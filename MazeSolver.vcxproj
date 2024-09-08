@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AutomatedPlayerController.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="MazeSolverAlgorithm.cpp" />
@@ -26,6 +27,7 @@
     <ClCompile Include="Renderer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AutomatedPlayerController.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="MazeSolverAlgorithm.h" />
     <ClInclude Include="PlayerController.h" />
