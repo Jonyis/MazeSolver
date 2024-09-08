@@ -8,7 +8,7 @@ class PlayerController
 	~PlayerController() = default;
 
 	void update(int xInput, int yInput);
-	
+	sf::Vector2i getPosition() const { return sf::Vector2i(posX, posY); }
 
 	private:
 		int posX;
